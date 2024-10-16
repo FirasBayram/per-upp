@@ -11,7 +11,7 @@ def call_openai_api(prompt, api_key):
     client = OpenAI(api_key=api_key)
     try:
         response = client.chat.completions.create(
-            model="ft:gpt-4o-2024-08-06:karlstad-university:firas-api-data:A6GMezrQ",
+            model="ft:gpt-4o-2024-08-06:karlstad-university:perupprefined:AIvn0RiI",
             messages=[{"role": "user", "content": prompt}]
         )
         return response.choices[0].message.content
