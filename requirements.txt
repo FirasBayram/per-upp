@@ -1,3 +1,2 @@
-streamlit==1.25.0
 pycountry==22.3.5
 openai==1.51.0
