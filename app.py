@@ -1,6 +1,7 @@
 import streamlit as st
 import pycountry
 from openai import OpenAI
+import os
 
 # Get list of countries (use pycountry library)
 countries = [country.name for country in pycountry.countries]
@@ -8,15 +9,32 @@ countries = [country.name for country in pycountry.countries]
 def call_openai_api(prompt, api_key):
     """Send the prompt to OpenAI API using the fine-tuned model and return the response."""
     try:
-        client = OpenAI(api_key=api_key)
+        # Set the API key in environment variable
+        os.environ["OPENAI_API_KEY"] = api_key
+        
+        # Initialize the client with the environment variable
+        client = OpenAI()
+        
+        # Make the API call
         response = client.chat.completions.create(
             model="ft:gpt-4-0824:karlstad-university:perupprefined:AIvn0RiI",
-            messages=[{"role": "user", "content": prompt}]
+            messages=[
+                {"role": "user", "content": prompt}
+            ],
+            temperature=0.7,
+            max_tokens=1000
         )
+        
+        # Return the response content
         return response.choices[0].message.content
+        
     except Exception as e:
         st.error(f"An error occurred: {str(e)}")
         return None
+    finally:
+        # Clean up the environment variable
+        if "OPENAI_API_KEY" in os.environ:
+            del os.environ["OPENAI_API_KEY"]
 
 def main():
     st.title("Travel Planning App")
